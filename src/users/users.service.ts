@@ -7,7 +7,9 @@ export class Users {
 
     createNewUser(newUsername : string) {
         if (this.users.length == 0) {
-
+            const newUser = new User(newUsername);
+            this.users.push(newUser);
+            return "Created new user successfully"
         } else {
             var isUsernameTaken : Boolean = false;
             this.users.forEach(user => {
@@ -17,7 +19,11 @@ export class Users {
             });
 
             if (!isUsernameTaken) {
-                const 
+                const newUser = new User(newUsername);
+                this.users.push(newUser);
+                return "Created new user successfully"
+            } else {
+                return "Failed to create new user. Try again"
             }
         } 
     }
