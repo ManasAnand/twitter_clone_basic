@@ -5,21 +5,6 @@ export class UsersController {
 
     @Post()
     createNewUser() {
-        
-    }
-
-    @Post()
-    postNewTweet() {
-
-    }
-
-    @Get('username')
-    viewAllUserTweets() {
-
-    }
-
-    @Put('username/tweet')
-    likeUserTweet(){
 
     }
 
