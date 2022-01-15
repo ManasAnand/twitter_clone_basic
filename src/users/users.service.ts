@@ -2,17 +2,17 @@ import {Injectable} from '@nestjs/common'
 import {User} from './user.model'
 
 @Injectable()
-export class Users {
-    users: User[] = [];
+export class UserService {
+    allUsers: User[] = [];
 
     createNewUser(newUsername : string) {
-        if (this.users.length == 0) {
+        if (this.allUsers.length == 0) {
             const newUser = new User(newUsername);
-            this.users.push(newUser);
-            return "Created new user successfully"
+            this.allUsers.push(newUser);
+            return true
         } else {
             var isUsernameTaken : Boolean = false;
-            this.users.forEach(user => {
+            this.allUsers.forEach(user => {
                 if (user.username == newUsername) {
                     isUsernameTaken = true;
                 }
@@ -20,10 +20,10 @@ export class Users {
 
             if (!isUsernameTaken) {
                 const newUser = new User(newUsername);
-                this.users.push(newUser);
-                return "Created new user successfully"
+                this.allUsers.push(newUser);
+                return true
             } else {
-                return "Failed to create new user. Try again"
+                return false
             }
         } 
     }
