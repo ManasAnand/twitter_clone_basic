@@ -1,6 +1,7 @@
-import {Controller, Post, Body, HttpException, HttpStatus} from '@nestjs/common'
+import {Controller, Post, Body, HttpException, HttpStatus, Param} from '@nestjs/common'
 import {UserService} from './users.service'
 
+// Controller for Users. Default URL pathway.
 @Controller()
 export class NewUserController {
     constructor (private readonly userService : UserService) {}
@@ -17,11 +18,12 @@ export class NewUserController {
         }
     }
 
-    @Post(':/user')
+    @Post('/:user')
     tweet(
+        @Param() params,
         @Body('tweet') tweetText : string
     ): any {
-
+        const isPostSuccessful = this.userService.p
     }
 }
 
