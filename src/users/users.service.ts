@@ -1,10 +1,10 @@
 import {Injectable} from '@nestjs/common'
 import {User} from './user.model'
-
+import {Post} from './post.model'
 @Injectable()
 export class UserService {
     allUsers: User[] = [];
-    currUser : User;
+    currUser : User = null;
 
     createNewUser(newUsername : string) {
         if (this.allUsers.length == 0) {
@@ -32,19 +32,45 @@ export class UserService {
     }
 
     postTweet(username : string, tweet : string) {
-        var isUsernameInDb = false;
-        this.allUsers.forEach( user => {
-            if (user.username == username && this.currUser.username == username) {
-                isUsernameInDb = true;
-            }
-        })
 
-        if (isUsernameInDb) {
+        if (this.findUserByName(username) && this.currUser.username == username) {
             var postId = this.currUser.allUserPosts.length + 1;
             const newPost = new Post(tweet, postId);
+            this.currUser.allUserPosts.push(newPost);
+            return true;
         }
 
         return false;
+    }
+
+    userSignIn(username : string) {
+        if (this.findUserByName(username) && this.currUser == null) {
+            this.allUsers.forEach( user => {
+                if (user.username == username) {
+                    this.currUser = user;
+                }
+            })
+            return true;
+        }
+        return false;
+    }
+
+    userSignOut(username : string) {
+        if (this.findUserByName(username) && this.currUser != null) {
+            this.currUser = null;
+            return true;
+        }
+        return false;
+    }
+
+    private findUserByName (username : string) {
+        var isUsernameInDb = false;
+        this.allUsers.forEach( user => {
+            if (user.username == username) {
+                isUsernameInDb = true;
+            }
+        })
+        return isUsernameInDb;
     }
 
 }
