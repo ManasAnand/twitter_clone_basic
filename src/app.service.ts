@@ -6,8 +6,5 @@ export class AppService {
   getUsers(): string {
     return 'Hello World!';
   }
-
-  retweet(): string {
-    return "Retweet"
-  }
+  
 }

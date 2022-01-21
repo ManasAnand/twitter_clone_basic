@@ -1,6 +1,7 @@
 import {Injectable} from '@nestjs/common'
 import {User} from './user.model'
 import {Post} from './post.model'
+
 @Injectable()
 export class UserService {
     allUsers: User[] = [];
@@ -56,11 +57,23 @@ export class UserService {
     }
 
     userSignOut(username : string) {
-        if (this.findUserByName(username) && this.currUser != null) {
+        if (this.findUserByName(username) && this.currUser.username == username) {
             this.currUser = null;
             return true;
         }
         return false;
+    }
+
+    getAllTweets(username : string) {
+        if (this.findUserByName(username)) {
+            this.allUsers.forEach( user => {
+                if (user.username == username) {
+                    return JSON.stringify(user.allUserPosts);
+                }
+            })
+        } else {
+            return false;
+        }  
     }
 
     private findUserByName (username : string) {
@@ -71,6 +84,32 @@ export class UserService {
             }
         })
         return isUsernameInDb;
+    }
+
+    likeUserTweet(usernameOfLiked : string, postIdOfLikedTweet : number) {
+        if (this.currUser == null) {
+            return false
+        } else {            
+            if (this.findUserByName(usernameOfLiked)) {
+                this.allUsers.forEach( user => {
+                    if (user.username == usernameOfLiked) {
+                        var tempUser = user;
+                        tempUser.allUserPosts.forEach(posts => {
+                            if (posts.tweetId == postIdOfLikedTweet) {
+                                this.currUser.allUserLikedPosts.forEach(currUserLikedPosts => {
+                                    if (currUserLikedPosts == posts){
+                                        return false;
+                                    }
+                                })
+                                this.currUser.allUserLikedPosts.push(posts);
+                                posts.numOfLikes += 1;
+                            }
+                        })
+                    }
+                })
+            }
+        }
+        return true;
     }
 
 }
